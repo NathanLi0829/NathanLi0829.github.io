@@ -1,78 +1,337 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>板块资金流向-A股17板块+美股ETF</title>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;background:#f5f6f7;padding:20px}
-.c{max-width:1400px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.08);padding:24px}
-.h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #eee}
-.t{font-size:22px;font-weight:700;color:#1a1a1a}
-.b{font-size:12px;color:#fff;background:#e74c3c;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}
-.bg{background:#27ae60}.bb{background:#2980b9}
-.dt{font-size:14px;color:#999;background:#f0f0f0;padding:4px 12px;border-radius:4px}
-.r{margin-bottom:10px;font-size:13px;line-height:2;background:#fafbfc;padding:12px 16px;border-radius:8px;border:1px solid #eee}
-.u{color:#e74c3c;font-weight:600}.d{color:#27ae60;font-weight:600}
-.p{margin-bottom:10px;font-size:12px;background:#f0f8ff;padding:10px 16px;border-radius:8px;border:1px solid #d0e3f0}
-.p .u,.p .d{font-weight:600}
-.s{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:5px;margin-bottom:14px}
-.sc{padding:7px 5px;border-radius:6px;background:#fafbfc;border:1px solid #eee;text-align:center;cursor:pointer;transition:all .2s}
-.sc:hover{transform:translateY(-2px);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-.sn{font-size:10px;color:#666;margin-bottom:2px}
-.sv{font-size:13px;font-weight:700}
-.sv.u{color:#e74c3c}.sv.d{color:#27ae60}
-.ct{margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.bn{padding:6px 16px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;font-size:13px;color:#555}
-.bn:hover{background:#f0f0f0}.bn.a{background:#2f4554;color:#fff;border-color:#2f4554}
-#ch{width:100%;height:600px}
-.cd{font-size:12px;color:#999;margin-top:8px;text-align:center}
-.ft{margin-top:16px;text-align:center;font-size:12px;color:#aaa;padding-top:12px;border-top:1px solid #eee}
-</style>
-</head>
-<body>
-<div class="c">
-<div class="h"><div class="t">板块资金流向 <span class="b">A股17板块</span><span class="b bg">5涨12跌</span><span class="b bb">+美股ETF</span></div><div class="dt">2026-06-26 周五 15:30</div></div>
-<div class="r"><div style="color:#666;font-size:12px;margin-bottom:4px;">A股涨幅排序（实线=A股，虚线=美股ETF）：</div><span class="u">芯片_+2.3</span> &gt; <span class="u">数字经济_+1.8</span> &gt; <span class="u">材料_+1.5</span> &gt; <span class="u">资源_+0.5</span> &gt; <span class="u">农业_+0.3</span><br><span class="d">定增重组_-0.2</span> &lt; <span class="d">高端制造_-0.5</span> &lt; <span class="d">医药_-0.8</span> &lt; <span class="d">应用服务_-1.0</span> &lt; <span class="d">消费_-1.2</span> &lt; <span class="d">基建地产_-1.4</span> &lt; <span class="d">娱乐_-1.5</span> &lt; <span class="d">电储_-2.1</span> &lt; <span class="d">军工_-2.2</span> &lt; <span class="d">汽车链_-2.3</span> &lt; <span class="d">金融_-5.0</span> &lt; <span class="d">光伏_-5.2</span></div>
-<div class="p"><strong style="color:#2980b9;">美股ETF对照（昨夜收盘）：</strong><span class="u">数字经济(KWEB)+3.2%</span> | <span class="u">芯片(SMH)+2.8%</span> | <span class="u">资源(XME)+1.5%</span> | <span class="u">应用服务(XLC)+1.5%</span> | <span class="u">军工(ITA)+1.2%</span> | <span class="u">材料(XLB)+1.1%</span> | <span class="u">农业(MOO)+0.9%</span> | <span class="u">娱乐(XLC)+0.8%</span> | <span class="u">医药(XLV)+0.6%</span> | <span class="u">定增重组(SPY)+0.4%</span> | <span class="u">电储(XLU)+0.3%</span> | <span class="d">高端制造(XLI)-0.2%</span></div>
-<div class="s" id="st"></div>
-<div class="ct">
-<button class="bn a" onclick="sA()">A股全部</button>
-<button class="bn" onclick="sT()">A股领涨</button>
-<button class="bn" onclick="sB()">A股领跌</button>
-<button class="bn" onclick="sU()">美股ETF</button>
-<button class="bn" onclick="sW()">全部</button>
-<button class="bn" onclick="tG()">网格</button>
-</div>
-<div id="ch"></div>
-<div class="cd" id="cd">计算中...</div>
-<div class="ft">数据源:AkShare(A股)|yfinance(美股ETF)|刷新窗口:交易日09:00-15:10|仅供投资参考</div>
-</div>
-<script>
-var T=["09:15","09:20","09:25","09:30","09:35","09:40","09:45","09:50","09:55","10:00","10:05","10:10","10:15","10:20","10:25","10:30","10:35","10:40","10:45","10:50","10:55","11:00","11:05","11:10","11:15","11:20","11:25","11:30","13:05","13:10","13:15","13:20","13:25","13:30","13:35","13:40","13:45","13:50","13:55","14:00","14:05","14:10","14:15","14:20","14:25","14:30","14:35","14:40","14:45","14:50","14:55","15:00"];
-var D=[{"name":"芯片","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[0.16,-0.12,0.11,0.37,-0.02,0.14,0.27,0.34,0.16,0.64,0.44,0.75,0.92,0.86,1.03,0.75,0.35,0.75,0.74,1.16,0.82,0.88,0.46,0.53,1.02,0.34,1.15,1.42,1.21,1.19,1.3,1.35,1.84,2.0,1.21,1.09,1.6,2.21,2.31,1.8,2.06,1.48,1.89,2.2,2.32,1.86,2.04,2.41,2.26,2.39,2.48,2.3]},{"name":"数字经济","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.26,0.0,0.02,0.26,0.5,0.61,0.04,-0.12,0.32,0.11,0.57,0.23,0.36,0.54,0.57,0.73,0.52,0.67,0.65,0.2,0.6,0.63,0.79,0.64,0.46,0.46,0.55,0.57,0.75,1.02,1.06,1.43,1.01,1.49,0.87,1.36,1.09,1.08,1.8,1.85,1.69,1.37,1.42,2.0,1.83,1.55,1.5,1.94,1.67,1.66,1.67,1.8]},{"name":"材料","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[0.13,-0.08,0.07,0.33,-0.06,0.05,0.18,0.21,0.07,0.47,0.31,0.56,0.74,0.7,0.82,0.56,0.18,0.49,0.45,0.83,0.52,0.56,0.18,0.18,0.6,-0.01,0.65,0.93,0.75,0.74,0.77,0.85,1.26,1.44,0.77,0.56,0.97,1.56,1.69,1.24,1.4,0.9,1.17,1.51,1.6,1.22,1.32,1.65,1.53,1.66,1.7,1.5]},{"name":"资源","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.21,-0.37,-0.73,-0.72,0.1,-0.11,0.45,0.12,-0.31,0.17,0.08,0.27,-0.07,-0.27,-0.34,0.24,0.2,0.47,-0.11,0.45,0.77,0.23,0.13,-0.18,-0.11,-0.18,0.12,-0.0,0.26,-0.19,-0.52,0.04,0.13,0.49,-0.08,0.4,0.35,0.04,0.39,0.1,0.47,0.83,0.9,0.11,-0.15,0.58,0.88,0.63,0.25,0.17,0.05,0.5]},{"name":"农业","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.21,0.27,0.25,0.15,-0.24,-0.16,0.25,-0.15,-0.01,0.1,-0.19,0.3,0.2,0.6,0.36,0.26,-0.18,-0.07,-0.04,0.27,0.23,-0.15,-0.08,0.04,0.04,-0.11,0.19,0.3,0.17,0.42,0.06,0.28,0.15,0.25,-0.15,0.11,0.08,0.15,0.37,0.4,0.09,0.19,0.08,0.24,0.43,0.01,0.16,0.48,0.26,0.15,0.15,0.3]},{"name":"定增重组","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[0.04,0.08,0.06,0.1,0.06,0.08,0.05,0.12,0.03,0.03,0.07,0.08,0.11,0.03,0.03,0.01,0.11,0.12,-0.07,0.03,0.02,0.07,0.09,0.08,0.11,0.03,0.08,0.14,0.01,-0.04,0.15,0.14,-0.05,0.09,0.17,0.05,0.06,0.13,0.09,0.16,0.16,0.12,0.05,0.17,0.17,0.1,0.1,0.1,0.17,0.17,0.19,-0.2]},{"name":"高端制造","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.02,-0.17,0.03,-0.16,-0.01,-0.08,-0.07,-0.14,-0.04,-0.01,-0.06,0.12,0.01,-0.14,-0.06,-0.03,-0.02,-0.12,-0.12,-0.05,-0.03,-0.14,-0.05,-0.12,-0.18,-0.1,-0.17,-0.18,-0.04,-0.1,-0.23,-0.08,-0.16,-0.13,-0.18,-0.24,-0.19,-0.17,-0.19,-0.19,-0.14,-0.15,-0.21,-0.25,-0.22,-0.2,-0.24,-0.28,-0.31,-0.32,-0.31,-0.5]},{"name":"医药","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.21,-0.2,-0.44,-0.3,0.12,-0.04,-0.24,-0.26,0.13,-0.19,-0.06,0.11,-0.09,0.13,-0.13,-0.06,-0.21,0.1,0.23,-0.22,-0.02,-0.14,-0.1,0.09,-0.13,-0.07,-0.06,-0.19,-0.12,-0.08,-0.08,-0.15,-0.05,-0.16,0.08,-0.13,-0.26,-0.16,-0.05,-0.21,-0.19,-0.06,0.12,-0.24,-0.13,-0.23,-0.2,-0.25,-0.29,-0.2,-0.2,-0.8]},{"name":"应用服务","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.19,-0.01,-0.1,-0.15,0.04,-0.04,-0.22,-0.01,-0.14,0.1,-0.26,-0.08,-0.19,0.22,-0.12,-0.02,-0.28,0.17,-0.1,-0.18,0.11,-0.08,-0.12,0.18,-0.01,0.1,0.0,-0.14,-0.04,0.06,-0.01,-0.13,-0.25,0.1,0.08,-0.19,-0.18,-0.21,-0.14,-0.08,-0.06,-0.06,-0.03,-0.08,-0.01,-0.09,-0.23,-0.14,-0.18,-0.22,-0.22,-1.0]},{"name":"消费","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[0.13,-0.33,-0.12,-0.33,-0.17,-0.28,-0.02,-0.31,0.24,-0.09,-0.29,0.02,0.1,-0.17,-0.25,-0.16,-0.11,-0.26,-0.42,-0.04,-0.01,0.11,-0.1,0.18,-0.19,0.02,-0.25,-0.09,-0.23,-0.14,-0.02,-0.39,-0.08,-0.1,0.12,0.02,0.02,-0.07,-0.1,0.15,-0.14,-0.16,-0.09,-0.13,-0.12,0.04,-0.12,-0.16,-0.32,-0.25,-0.3,-1.2]},{"name":"基建地产","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.09,-0.1,-0.34,-0.15,-0.28,0.09,-0.08,-0.09,-0.21,-0.13,-0.13,0.1,-0.16,0.09,0.06,-0.04,-0.18,-0.07,-0.01,0.04,-0.1,-0.14,-0.14,-0.13,-0.16,-0.13,-0.04,-0.13,-0.01,-0.1,-0.02,-0.04,-0.07,0.05,0.02,-0.1,-0.06,0.01,-0.1,0.01,-0.12,-0.11,-0.03,-0.15,-0.12,-0.13,-0.15,-0.19,-0.21,-0.1,-0.14,-1.4]},{"name":"娱乐","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.23,-0.23,-0.17,-0.15,-0.18,-0.28,-0.14,-0.06,0.15,-0.01,-0.09,-0.16,-0.32,-0.2,-0.1,-0.26,-0.18,-0.06,-0.27,-0.06,-0.04,-0.07,-0.26,0.0,-0.01,0.05,-0.22,-0.1,-0.23,-0.14,-0.12,-0.1,-0.17,-0.15,-0.18,-0.08,-0.03,-0.13,-0.1,0.02,-0.02,-0.06,-0.17,-0.19,-0.18,-0.14,-0.14,-0.11,-0.2,-0.21,-0.21,-1.5]},{"name":"电储","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.15,-0.12,0.05,-0.37,-0.1,-0.23,-0.18,0.0,-0.1,-0.08,-0.27,-0.22,-0.08,-0.27,-0.14,-0.25,-0.29,-0.06,-0.2,-0.05,-0.09,-0.16,-0.09,-0.03,-0.24,-0.27,-0.06,-0.17,-0.21,-0.05,-0.22,-0.17,-0.16,-0.11,-0.13,-0.14,-0.2,-0.14,0.03,-0.22,-0.15,-0.09,-0.04,-0.2,-0.04,-0.06,-0.19,-0.1,-0.19,-0.23,-0.13,-2.1]},{"name":"军工","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.11,-0.11,-0.26,-0.32,-0.03,-0.13,-0.06,0.14,0.03,-0.16,0.18,0.06,-0.19,-0.27,0.15,-0.04,-0.07,-0.07,0.11,0.1,-0.04,0.03,-0.15,-0.09,0.07,-0.11,0.01,-0.06,-0.05,-0.08,0.06,0.03,0.09,-0.16,-0.09,0.08,-0.13,-0.16,-0.06,-0.08,-0.08,-0.04,0.04,0.05,-0.03,-0.08,0.08,-0.07,-0.13,-0.07,0.04,-2.2]},{"name":"汽车链","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.03,-0.13,-0.28,0.14,0.07,-0.03,-0.28,-0.04,-0.21,-0.04,-0.21,-0.03,-0.18,-0.16,-0.13,-0.17,0.04,-0.06,0.01,0.01,-0.19,-0.1,-0.1,-0.03,-0.03,0.04,-0.08,-0.17,-0.09,0.03,0.03,-0.15,-0.08,0.03,-0.05,-0.07,0.0,-0.02,-0.14,-0.14,-0.05,-0.07,-0.15,-0.1,-0.01,-0.06,0.04,-0.06,-0.04,-0.08,0.09,-2.3]},{"name":"金融","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.28,-0.23,-0.28,-0.36,-0.13,-0.4,0.08,-0.37,-0.18,-0.06,-0.21,0.04,-0.09,-0.29,-0.28,-0.12,-0.06,0.04,-0.14,-0.08,-0.14,0.01,-0.25,-0.01,-0.1,0.03,-0.12,-0.12,0.01,-0.12,-0.07,-0.08,-0.01,0.05,-0.09,-0.1,0.04,-0.05,-0.13,0.0,-0.05,0.05,-0.08,-0.04,0.02,-0.15,-0.13,-0.02,0.0,-0.03,0.04,-5.0]},{"name":"光伏","type":"line","smooth":0.3,"symbol":"none","lineStyle":{"width":1.5},"data":[-0.15,0.06,-0.31,-0.03,-0.27,0.06,0.09,0.02,-0.24,0.18,-0.12,-0.14,-0.12,-0.15,-0.08,0.1,0.13,-0.01,0.05,0.11,0.08,-0.08,-0.13,0.16,-0.01,0.12,-0.02,0.12,-0.01,-0.14,-0.1,-0.04,0.02,0.17,-0.08,-0.12,-0.05,-0.06,-0.06,0.08,-0.05,0.14,0.09,-0.03,0.06,-0.06,-0.12,-0.03,0.03,0.01,0.02,-5.2]}];
-var I={"芯片":2.3,"数字经济":1.8,"材料":1.5,"资源":0.5,"农业":0.3,"定增重组":-0.2,"高端制造":-0.5,"医药":-0.8,"应用服务":-1.0,"消费":-1.2,"基建地产":-1.4,"娱乐":-1.5,"电储":-2.1,"军工":-2.2,"汽车链":-2.3,"金融":-5.0,"光伏":-5.2};
-var E=document.getElementById('st');
-Object.entries(I).forEach(function(_ref){var name=_ref[0],val=_ref[1];var c=val>=0?'u':'d',s=val>=0?'+':'';E.innerHTML+='<div class="sc" onclick="hS(\''+name+'\')"><div class="sn">'+name+'</div><div class="sv '+c+'">'+s+val.toFixed(2)+'%</div></div>'});
-var ch=echarts.init(document.getElementById('ch'));
-var uN=D.filter(function(s){return s.name.indexOf('(')>-1}).map(function(s){return s.name});
-var aN=D.filter(function(s){return s.name.indexOf('(')===-1}).map(function(s){return s.name});
-ch.setOption({tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.95)',borderColor:'#ddd',borderWidth:1,textStyle:{color:'#333',fontSize:12},formatter:function(p){var h='<div style="font-weight:700;margin-bottom:6px;">'+p[0].axisValue+'</div>';p.sort(function(a,b){return b.value-a.value});p.forEach(function(x){var c=x.value>=0?'#e74c3c':'#27ae60',s=x.value>=0?'+':'';var m=x.seriesName.indexOf('(')>-1?'⤳':'●';h+='<div style="display:flex;justify-content:space-between;min-width:190px;padding:2px 0;"><span>'+m+' '+x.seriesName+'</span><span style="color:'+c+';font-weight:600;">'+s+x.value.toFixed(2)+'%</span></div>'});return h}},legend:{data:D.map(function(s){return s.name}),top:0,type:'scroll',textStyle:{fontSize:10}},grid:{left:60,right:80,top:70,bottom:100},xAxis:{type:'category',boundaryGap:false,data:T,axisLabel:{fontSize:11,color:'#666',interval:9},axisLine:{lineStyle:{color:'#ddd'}},splitLine:{show:false}},yAxis:{type:'value',axisLabel:{fontSize:11,color:'#666',formatter:'{value}%'},axisLine:{show:false},splitLine:{lineStyle:{color:'#f0f0f0',type:'dashed'}},scale:true},dataZoom:[{type:'inside',start:0,end:100},{type:'slider',start:0,end:100,height:30,bottom:20,borderColor:'#eee',fillerColor:'rgba(47,69,84,0.1)',handleStyle:{color:'#2f4554'}}],color:["#e74c3c","#3498db","#2ecc71","#f39c12","#9b59b6","#1abc9c","#e67e22","#34495e","#16a085","#c0392b","#2980b9","#8e44ad","#da70d6","#32cd32","#ff6b6b","#4ecdc4","#ffe66d"],series:D,animation:true,animationDuration:800});
-window.addEventListener('resize',function(){ch.resize()});
-var gV=true;
-function tG(){gV=!gV;ch.setOption({yAxis:{splitLine:{show:gV,lineStyle:{color:'#f0f0f0',type:'dashed'}}}})}
-function sel(names){var s={};D.forEach(function(x){s[x.name]=names.indexOf(x.name)>-1});ch.setOption({legend:{selected:s}})}
-function sA(){sel(aN);uB(0)}
-function sT(){var t=D.filter(function(x){return x.name.indexOf('(')===-1}).sort(function(a,b){return b.data[b.data.length-1]-a.data[a.data.length-1]}).slice(0,5).map(function(x){return x.name});sel(t);uB(1)}
-function sB(){var b=D.filter(function(x){return x.name.indexOf('(')===-1}).sort(function(a,b){return a.data[a.data.length-1]-b.data[a.data.length-1]}).slice(0,5).map(function(x){return x.name});sel(b);uB(2)}
-function sU(){sel(uN);uB(3)}
-function sW(){sel(D.map(function(x){return x.name}));uB(4)}
-function uB(i){document.querySelectorAll('.ct .bn').forEach(function(b,j){b.classList.toggle('a',j===i)})}
-function hS(name){sel(D.filter(function(s){return s.name===name||s.name.indexOf(name+'(')===0}).map(function(s){return s.name}))}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naihan Li | Professional Portfolio</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-function uC(){var n=new Date();var e=new Date(n.getFullYear(),n.getMonth(),n.getDate(),15,10,0);var da=n.getDay();if(da===0||da===6||n>e){e=new Date(e.getTime()+24*60*60*1000);while(e.getDay()===0||e.getDay()===6)e=new Date(e.getTime()+24*60*60*1000);}var df=Math.floor((e-n)/1000);if(df<=0){document.getElementById('cd').textContent='已收盘，下次9:00刷新';return;}var h=Math.floor(df/3600),m=Math.floor((df%3600)/60),s=df%60;document.getElementById('cd').textContent='距收盘'+h+'时'+m+'分'+s+'秒|仅交易日09:00-15:10刷新';}
-setInterval(uC,1000);uC();
-</script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            scroll-behavior: smooth;
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg::before, .hero-bg::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+        .hero-bg::before {
+            width: 600px;
+            height: 600px;
+            top: -200px;
+            left: -100px;
+        }
+        .hero-bg::after {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -50px;
+            animation-direction: reverse;
+        }
+        @keyframes float {
+            0% { transform: rotate(0deg) translate(0, 0); }
+            50% { transform: rotate(180deg) translate(50px, 50px); }
+            100% { transform: rotate(360deg) translate(0, 0); }
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: #ffffff;
+            margin-left: 4px;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, visibility;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .progress-bar-fill {
+            transition: width 1.5s ease-in-out;
+            width: 0;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="text-xl font-bold text-blue-900 tracking-tight">Naihan Li.</a>
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+                <a href="#home" class="hover:text-blue-700 transition-colors">首页</a>
+                <a href="#about" class="hover:text-blue-700 transition-colors">个人简介</a>
+                <a href="#skills" class="hover:text-blue-700 transition-colors">专业技能</a>
+                <a href="#portfolio" class="hover:text-blue-700 transition-colors">项目作品</a>
+                <a href="#contact" class="hover:text-blue-700 transition-colors">联系方式</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center pt-20">
+        <div class="text-center px-6 z-10">
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+                Hello, I'm <span class="text-blue-300">Naihan</span>
+            </h1>
+            <div class="text-xl md:text-3xl font-light text-slate-200 mb-10 h-10">
+                <span id="typewriter-text"></span><span class="typing-cursor">&nbsp;</span>
+            </div>
+            <a href="#about" class="inline-block border border-white/50 text-white px-8 py-3 rounded-full hover:bg-white hover:text-blue-900 transition-all duration-300">
+                深入了解
+            </a>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 bg-white fade-in-section">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-blue-900 mb-4">关于我</h2>
+            <div class="w-16 h-1 bg-blue-600 mx-auto mb-8"></div>
+            <p class="text-lg text-slate-600 leading-relaxed text-justify md:text-center">
+                我是一名具备严密逻辑体系的专业审计师与财务专家，深耕于企业内控设计、IPO 合规架构搭建以及复杂财务报告分析。在确保证券市场信息披露合规性的同时，我始终保持对前沿技术的敏锐嗅觉。目前，我正积极将 Python 数据分析与 SQL/Oracle 数据库管理等技术工具引入传统财务工作流，致力于通过数据驱动的思维，实现财务审计与商业智能的跨界融合，提升审计程序的精确度与自动化水平。
+            </p>
+        </div>
+    </section>
+
+    <section id="skills" class="py-24 bg-slate-50 fade-in-section">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-blue-900 mb-4">专业与技术技能</h2>
+            <div class="w-16 h-1 bg-blue-600 mx-auto mb-16"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <div class="flex justify-between mb-2"><span class="font-medium text-slate-700">US GAAP / IFRS 财务准则</span><span class="text-blue-600">95%</span></div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5">
+                        <div class="bg-blue-800 h-2.5 rounded-full progress-bar-fill" data-width="95%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-2"><span class="font-medium text-slate-700">企业内控与风险管理 (SOX compliance)</span><span class="text-blue-600">90%</span></div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5">
+                        <div class="bg-blue-700 h-2.5 rounded-full progress-bar-fill" data-width="90%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-2"><span class="font-medium text-slate-700">SQL / Oracle EBS 数据提取与分析</span><span class="text-blue-600">75%</span></div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5">
+                        <div class="bg-blue-600 h-2.5 rounded-full progress-bar-fill" data-width="75%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-2"><span class="font-medium text-slate-700">Python 数据处理与自动化编程</span><span class="text-blue-600">60%</span></div>
+                    <div class="w-full bg-slate-200 rounded-full h-2.5">
+                        <div class="bg-blue-500 h-2.5 rounded-full progress-bar-fill" data-width="60%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="py-24 bg-white fade-in-section">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-blue-900 mb-4">精选项目底稿</h2>
+            <div class="w-16 h-1 bg-blue-600 mx-auto mb-16"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white border border-slate-100 rounded-lg overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                    <div class="h-48 bg-slate-200 flex items-center justify-center">
+                        <i class="fa-solid fa-file-invoice-dollar text-4xl text-slate-400"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-blue-900 mb-2">拟上市公司内控架构设计</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            为处于 Pre-IPO 阶段的科技企业梳理核心业务流程，建立符合上市合规要求的财务内部控制矩阵，穿行测试覆盖率达100%。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-100 rounded-lg overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                    <div class="h-48 bg-blue-50 flex items-center justify-center">
+                        <i class="fa-solid fa-database text-4xl text-blue-300"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-blue-900 mb-2">Oracle 财务系统数据验证脚本</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            利用 SQL 编写复杂的查询语句，对接 Oracle EBS 后台数据库，实现海量审计凭证的自动抽样与账龄分析，大幅降低实质性测试工时。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-100 rounded-lg overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                    <div class="h-48 bg-slate-800 flex items-center justify-center">
+                        <i class="fa-brands fa-python text-4xl text-blue-400"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-blue-900 mb-2">Python 财报自动化分析工具</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            处于研发阶段的个人探索项目。利用 Python Pandas 库清洗财务指标数据，快速生成可视化图表，辅助对标企业的财务健康度评估。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 bg-slate-900 fade-in-section">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-white mb-4">取得联系</h2>
+            <div class="w-16 h-1 bg-blue-500 mx-auto mb-16"></div>
+
+            <div class="flex flex-col md:flex-row gap-12">
+                <div class="flex-1 bg-white/5 p-8 rounded-lg border border-white/10">
+                    <form onsubmit="event.preventDefault(); alert('由于这是纯前端网页，表单提交通道暂未配置后端。请通过右侧方式联系我。');">
+                        <div class="mb-4">
+                            <label class="block text-slate-300 text-sm mb-2">您的姓名</label>
+                            <input type="text" class="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded focus:outline-none focus:border-blue-500" placeholder="John Doe">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-slate-300 text-sm mb-2">您的邮箱</label>
+                            <input type="email" class="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded focus:outline-none focus:border-blue-500" placeholder="john@example.com">
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-slate-300 text-sm mb-2">留言内容</label>
+                            <textarea class="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-white rounded focus:outline-none focus:border-blue-500 h-32" placeholder="如何推进合作..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 rounded transition-colors">
+                            发送邮件
+                        </button>
+                    </form>
+                </div>
+
+                <div class="flex-1 flex flex-col justify-center text-slate-300">
+                    <h3 class="text-xl font-bold text-white mb-6">在线履历与技术主页</h3>
+                    <p class="mb-8 leading-relaxed">
+                        无论是探讨严肃的审计准则、IPO合规框架，还是交流 Python 编程与数据分析心得，我都非常乐意与您沟通。
+                    </p>
+                    <div class="space-y-4">
+                        <a href="https://linkedin.com/" target="_blank" class="flex items-center gap-4 hover:text-white transition-colors group">
+                            <div class="w-10 h-10 bg-slate-800 flex items-center justify-center rounded-full group-hover:bg-[#0077b5] transition-colors">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </div>
+                            <span>LinkedIn 职业履历</span>
+                        </a>
+                        <a href="https://github.com/NathanLi0829" target="_blank" class="flex items-center gap-4 hover:text-white transition-colors group">
+                            <div class="w-10 h-10 bg-slate-800 flex items-center justify-center rounded-full group-hover:bg-[#333] transition-colors">
+                                <i class="fa-brands fa-github"></i>
+                            </div>
+                            <span>GitHub 代码主页</span>
+                        </a>
+                        <a href="mailto:your.email@example.com" class="flex items-center gap-4 hover:text-white transition-colors group">
+                            <div class="w-10 h-10 bg-slate-800 flex items-center justify-center rounded-full group-hover:bg-blue-600 transition-colors">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <span>发送工作邮件</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 py-6 text-center text-slate-500 text-sm">
+        <p>&copy; 2026 Naihan Li. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const texts = ["Auditor", "Financial Expert", "Data Enthusiast"];
+        let count = 0;
+        let index = 0;
+        let currentText = "";
+        let letter = "";
+        let isDeleting = false;
+
+        function type() {
+            if (count === texts.length) {
+                count = 0;
+            }
+            currentText = texts[count];
+
+            if (isDeleting) {
+                letter = currentText.slice(0, --index);
+            } else {
+                letter = currentText.slice(0, ++index);
+            }
+
+            document.getElementById('typewriter-text').textContent = letter;
+
+            let typeSpeed = 100;
+            if (isDeleting) { typeSpeed /= 2; }
+
+            if (!isDeleting && letter.length === currentText.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && letter.length === 0) {
+                isDeleting = false;
+                count++;
+                typeSpeed = 500;
+            }
+            setTimeout(type, typeSpeed);
+        }
+        setTimeout(type, 1000);
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    
+                    if (entry.target.id === 'skills') {
+                        const progressBars = entry.target.querySelectorAll('.progress-bar-fill');
+                        progressBars.forEach(bar => {
+                            const width = bar.getAttribute('data-width');
+                            bar.style.width = width;
+                        });
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                const navHeight = document.querySelector('nav').offsetHeight;
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - navHeight,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
