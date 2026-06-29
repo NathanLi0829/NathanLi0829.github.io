@@ -2,201 +2,183 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>板块资金流向 - A股17板块主力净流入 (2026-06-29)</title>
+<title>板块资金流向折线图 - A股主力净流入 (2026-06-29)</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;background:#f5f6f7;padding:20px}
 .c{max-width:1400px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.08);padding:24px}
-.h{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #eee;flex-wrap:wrap;gap:10px}
+.h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #eee;flex-wrap:wrap;gap:10px}
 .t{font-size:22px;font-weight:700;color:#1a1a1a}
 .b{font-size:12px;color:#fff;background:#e74c3c;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle}
 .bg{background:#27ae60}
 .dt{font-size:14px;color:#999;background:#f0f0f0;padding:4px 12px;border-radius:4px}
-.sm{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
-.st{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:16px 24px;border-radius:10px;flex:1;min-width:140px;text-align:center}
+.sm{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.st{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:14px 20px;border-radius:10px;flex:1;min-width:130px;text-align:center}
 .sr{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)}
 .sg{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)}
-.sv{font-size:24px;font-weight:700}
-.sl{font-size:12px;opacity:0.9;margin-top:4px}
-.ct{margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap}
+.sv{font-size:22px;font-weight:700}
+.sl{font-size:11px;opacity:0.9;margin-top:4px}
+.r{margin-bottom:12px;font-size:13px;line-height:2;background:#fafbfc;padding:10px 14px;border-radius:8px;border:1px solid #eee}
+.u{color:#e74c3c;font-weight:600}.d{color:#27ae60;font-weight:600}
+.s{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:5px;margin-bottom:14px}
+.sc{padding:6px 4px;border-radius:6px;background:#fafbfc;border:1px solid #eee;text-align:center;cursor:pointer;transition:all .2s;font-size:12px}
+.sc:hover{transform:translateY(-2px);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.sc .sn{font-size:10px;color:#666;margin-bottom:1px}
+.sc .sv{font-size:13px;font-weight:700}
+.ct{margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap}
 .bn{padding:6px 16px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer;font-size:13px;color:#555;transition:all .2s}
 .bn:hover{background:#f0f0f0}.bn.a{background:#2f4554;color:#fff;border-color:#2f4554}
-#ch1{width:100%;height:500px;margin-bottom:20px}
-#ch2{width:100%;height:400px;margin-bottom:20px;display:none}
-.tb{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px}
-.tb th{background:#f8f9fa;padding:10px 8px;text-align:center;font-weight:600;color:#555;border-bottom:2px solid #dee2e6;position:sticky;top:0;z-index:10}
-.tb td{padding:8px;text-align:center;border-bottom:1px solid #eee}
+#ch1{width:100%;height:550px}
+#ch2{width:100%;height:400px;margin-bottom:16px;display:none}
+.tb{width:100%;border-collapse:collapse;font-size:12px}
+.tb th{background:#f8f9fa;padding:8px 6px;text-align:center;font-weight:600;color:#555;border-bottom:2px solid #dee2e6;position:sticky;top:0;z-index:10}
+.tb td{padding:6px;text-align:center;border-bottom:1px solid #eee}
 .tb tr:hover{background:#f8f9fa}
-.u{color:#e74c3c;font-weight:600}.d{color:#27ae60;font-weight:600}
-.tbf{max-height:400px;overflow-y:auto;border:1px solid #eee;border-radius:6px}
-.ft{margin-top:20px;text-align:center;font-size:12px;color:#aaa;padding-top:12px;border-top:1px solid #eee}
+.tbf{max-height:350px;overflow-y:auto;border:1px solid #eee;border-radius:6px;display:none}
+.ft{margin-top:16px;text-align:center;font-size:12px;color:#aaa;padding-top:12px;border-top:1px solid #eee}
 .cd{font-size:12px;color:#999;margin-top:8px;text-align:center}
-.si{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-bottom:16px}
-.sc{padding:8px 6px;border-radius:6px;background:#fafbfc;border:1px solid #eee;text-align:center;cursor:pointer;transition:all .2s}
-.sc:hover{transform:translateY(-2px);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-.sn{font-size:11px;color:#666;margin-bottom:2px}
-.sv2{font-size:14px;font-weight:700}
 </style>
 </head>
 <body>
 <div class="c">
-<div class="h">
-<div class="t">板块资金流向 <span class="b">16板块</span></div>
-<div class="dt">2026-06-29 18:02 更新</div>
-</div>
+<div class="h"><div class="t">板块资金流向 <span class="b">16板块</span><span class="b bg">16流入0流出</span></div><div class="dt">2026-06-29 收盘数据</div></div>
 
 <div class="sm">
-<div class="st"><div class="sv" id="t1">+187.6亿</div><div class="sl">合计主力净流入</div></div>
-<div class="st sr"><div class="sv" id="t2">16个</div><div class="sl">资金流入板块</div></div>
-<div class="st sg"><div class="sv" id="t3">0个</div><div class="sl">资金流出板块</div></div>
+<div class="st"><div class="sv">+187.6亿</div><div class="sl">合计主力净流入</div></div>
+<div class="st sr"><div class="sv">16个</div><div class="sl">资金流入板块</div></div>
+<div class="st sg"><div class="sv">0个</div><div class="sl">资金流出板块</div></div>
 </div>
+
+<div class="r"><div style="color:#666;font-size:12px;margin-bottom:4px;">主力净流入排序（红入绿出，单位：亿元）：</div><span class="u">医药_+63.3亿</span> &gt; <span class="u">数字经济_+44.2亿</span> &gt; <span class="u">高端制造_+14.7亿</span> &gt; <span class="u">资源_+13.0亿</span> &gt; <span class="u">芯片_+8.9亿</span> &gt; <span class="u">电储_+8.6亿</span> &gt; <span class="u">光伏_+8.2亿</span> &gt; <span class="u">材料_+6.6亿</span> &gt; <span class="u">金融_+6.3亿</span> &gt; <span class="u">农业_+5.0亿</span> &gt; <span class="u">基建地产_+2.2亿</span> &gt; <span class="u">汽车链_+2.1亿</span> &gt; <span class="u">应用服务_+1.5亿</span> &gt; <span class="u">消费_+1.4亿</span> &gt; <span class="u">军工_+0.7亿</span> &gt; <span class="u">娱乐_+0.7亿</span><br></div>
+
+<div class="s" id="st"></div>
 
 <div class="ct">
-<button class="bn a" onclick="showMain()">主力净流入</button>
-<button class="bn" onclick="showDetail()">细分流向</button>
+<button class="bn a" onclick="showLine()">折线趋势</button>
+<button class="bn" onclick="showBar()">当前对比</button>
 <button class="bn" onclick="showTable()">数据表格</button>
 </div>
-
-<div class="si" id="st"></div>
 
 <div id="ch1"></div>
 <div id="ch2"></div>
 
-<div class="tbf" id="tb" style="display:none">
+<div class="tbf" id="tb">
 <table class="tb">
-<thead>
-<tr>
-<th>板块</th><th>主力净流入</th><th>超大单</th><th>大单</th><th>中单</th><th>小单</th><th>涨跌幅</th>
-</tr>
-</thead>
-<tbody id="tbd">
-</tbody>
+<thead><tr><th>板块</th><th>主力净流入</th><th>超大单</th><th>大单</th><th>占比</th></tr></thead>
+<tbody id="tbd"></tbody>
 </table>
 </div>
 
-<div class="cd" id="cd">数据更新时间: 2026-06-29 18:02 | 数据来源: 东方财富 | 仅供投资参考</div>
-<div class="ft">板块资金流向实时监视 | 主力净流入 = 超大单 + 大单 | 红色流入 绿色流出</div>
+<div class="cd">数据更新时间: 2026-06-29 18:14 | 采样频率: 每30分钟 | 数据来源: 东方财富 | 仅供投资参考</div>
+<div class="ft">板块资金流向实时监视 | 红色=资金流入 绿色=资金流出 | 每30分钟自动采样构建日内走势</div>
 </div>
 
 <script>
-var N=["医药", "数字经济", "高端制造", "资源", "芯片", "电储", "光伏", "材料", "金融", "农业", "基建地产", "汽车链", "应用服务", "消费", "军工", "娱乐"];
-var M=[63.31, 44.2, 14.74, 12.98, 8.88, 8.63, 8.18, 6.62, 6.34, 5.05, 2.24, 2.15, 1.5, 1.44, 0.68, 0.65];
-var S=[43.69, 24.89, 24.11, 8.76, -41.63, 1.83, 3.66, 15.57, 2.55, 1.44, 3.52, 2.71, -0.68, 0.52, -3.06, 0.37];
-var L=[19.62, 19.31, -9.37, 4.23, 50.51, 6.8, 4.52, -8.96, 3.79, 3.62, -1.28, -0.56, 2.18, 0.92, 3.73, 0.28];
-var Mi=[-45.4, -43.29, -15.1, 0.54, -61.8, 0.05, -5.74, -10.2, -1.83, -2.91, -1.62, -2.6, 0.14, -4.12, 2.67, 2.28];
-var Sm=[-15.84, -0.91, -0.69, -13.54, 53.4, -8.68, -2.63, 3.53, -4.51, -2.21, -0.63, 0.45, -1.64, 2.68, -3.34, -3.09];
-var C=["#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c", "#e74c3c"];
+var T=["09:30","10:00","10:30","11:00","11:30","13:00","13:30","14:00","14:30","15:00"];
+var D=[{"name":"医药","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,63.31]},{"name":"数字经济","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,44.2]},{"name":"高端制造","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,14.74]},{"name":"资源","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,12.98]},{"name":"芯片","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,8.88]},{"name":"电储","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,8.63]},{"name":"光伏","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,8.18]},{"name":"材料","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,6.62]},{"name":"金融","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,6.34]},{"name":"农业","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,5.05]},{"name":"基建地产","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,2.24]},{"name":"汽车链","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,2.15]},{"name":"应用服务","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,1.5]},{"name":"消费","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,1.44]},{"name":"军工","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,0.68]},{"name":"娱乐","type":"line","smooth":0.3,"symbol":"circle","symbolSize":6,"lineStyle":{"width":2},"data":[null,null,null,null,null,null,null,null,null,0.65]}];
+var L={"医药":63.31,"数字经济":44.2,"高端制造":14.74,"资源":12.98,"芯片":8.88,"电储":8.63,"光伏":8.18,"材料":6.62,"金融":6.34,"农业":5.05,"基建地产":2.24,"汽车链":2.15,"应用服务":1.5,"消费":1.44,"军工":0.68,"娱乐":0.65};
 
-// 板块快捷按钮
 var E=document.getElementById('st');
-for(var i=0;i<N.length;i++){
-  var c=M[i]>=0?'u':'d',sg=M[i]>=0?'+':'';
-  E.innerHTML+='<div class="sc" onclick="hl('+i+')">'+
-    '<div class="sn">'+N[i]+'</div>'+
-    '<div class="sv2 '+c+'">'+sg+M[i].toFixed(2)+'亿</div></div>';
-}
-
-// 主图：主力净流入横向柱状图
-var ch1=echarts.init(document.getElementById('ch1'));
-ch1.setOption({
-  title:{text:'主力净流入排名（亿元）',left:'center',textStyle:{fontSize:16,color:'#333'}},
-  tooltip:{
-    trigger:'axis',axisPointer:{type:'shadow'},
-    formatter:function(p){
-      var i=p[0].dataIndex;
-      return '<b>'+N[i]+'</b><br/>'+
-        '主力净流入: <b style="color:'+(M[i]>=0?'#e74c3c':'#27ae60')+'">'+(M[i]>=0?'+':'')+M[i].toFixed(2)+'亿</b><br/>'+
-        '超大单: '+(S[i]>=0?'+':'')+S[i].toFixed(2)+'亿<br/>'+
-        '大单: '+(L[i]>=0?'+':'')+L[i].toFixed(2)+'亿<br/>'+
-        '中单: '+(Mi[i]>=0?'+':'')+Mi[i].toFixed(2)+'亿<br/>'+
-        '小单: '+(Sm[i]>=0?'+':'')+Sm[i].toFixed(2)+'亿';
-    }
-  },
-  grid:{left:80,right:60,top:50,bottom:30},
-  xAxis:{
-    type:'value',axisLabel:{formatter:'{value}亿',fontSize:11,color:'#666'},
-    splitLine:{lineStyle:{color:'#f0f0f0',type:'dashed'}},
-    axisLine:{show:false}
-  },
-  yAxis:{
-    type:'category',data:N,axisLabel:{fontSize:12,color:'#333'},
-    axisLine:{lineStyle:{color:'#ddd'}},splitLine:{show:false}
-  },
-  series:[{
-    type:'bar',data:M,
-    itemStyle:{color:function(p){return C[p.dataIndex]}},
-    barWidth:'60%',
-    label:{show:true,position:'right',formatter:function(p){return (p.value>=0?'+':'')+p.value.toFixed(2)+'亿'},fontSize:11}
-  }],
-  animation:true,animationDuration:800
+Object.entries(L).sort(function(a,b){return b[1]-a[1]}).forEach(function(_ref){
+  var name=_ref[0],val=_ref[1];
+  var c=val>=0?'u':'d',sg=val>=0?'+':'';
+  E.innerHTML+='<div class="sc" onclick="hl(\''+name+'\')">'+
+    '<div class="sn">'+name+'</div>'+
+    '<div class="sv '+c+'">'+sg+val.toFixed(2)+'亿</div></div>';
 });
 
-// 细分流向图
+var ch1=echarts.init(document.getElementById('ch1'));
+ch1.setOption({
+  title:{text:'板块主力净流入日内走势（亿元）',left:'center',top:5,textStyle:{fontSize:16,color:'#333'}},
+  tooltip:{
+    trigger:'axis',
+    backgroundColor:'rgba(255,255,255,0.95)',borderColor:'#ddd',borderWidth:1,textStyle:{color:'#333',fontSize:12},
+    formatter:function(p){
+      var h='<div style="font-weight:700;margin-bottom:6px;">'+p[0].axisValue+'</div>';
+      p.sort(function(a,b){return (b.value||0)-(a.value||0)});
+      p.forEach(function(x){
+        if(x.value===null||x.value===undefined)return;
+        var c=x.value>=0?'#e74c3c':'#27ae60',s=x.value>=0?'+':'';
+        h+='<div style="display:flex;justify-content:space-between;min-width:180px;padding:2px 0;">'+
+          '<span>'+x.marker+' '+x.seriesName+'</span>'+
+          '<span style="color:'+c+';font-weight:600;">'+s+x.value.toFixed(2)+'亿</span></div>';
+      });
+      return h;
+    }
+  },
+  legend:{data:D.map(function(s){return s.name}),top:35,type:'scroll',textStyle:{fontSize:11}},
+  grid:{left:70,right:60,top:90,bottom:50},
+  xAxis:{
+    type:'category',boundaryGap:false,data:T,
+    axisLabel:{fontSize:11,color:'#666'},
+    axisLine:{lineStyle:{color:'#ddd'}},splitLine:{show:false}
+  },
+  yAxis:{
+    type:'value',name:'亿元',nameTextStyle:{color:'#999',fontSize:11},
+    axisLabel:{fontSize:11,color:'#666',formatter:function(v){return v>=0?'+'+v:v}},
+    axisLine:{show:false},splitLine:{lineStyle:{color:'#f0f0f0',type:'dashed'}},
+    scale:true
+  },
+  series:D,
+  color:["#e74c3c","#3498db","#2ecc71","#f39c12","#9b59b6","#1abc9c","#e67e22","#34495e","#16a085","#c0392b","#2980b9","#8e44ad","#da70d6","#32cd32","#ff6b6b","#4ecdc4"],
+  animation:true,animationDuration:1000
+});
+
 var ch2=echarts.init(document.getElementById('ch2'));
+var barNames=D.map(function(s){return s.name});
+var barValues=D.map(function(s){var v=s.data[s.data.length-1];return v!==null?v:0;});
+var barColors=barValues.map(function(v){return v>=0?'#e74c3c':'#27ae60';});
 ch2.setOption({
-  title:{text:'细分资金流向（亿元）',left:'center',textStyle:{fontSize:16,color:'#333'}},
+  title:{text:'当前主力净流入对比（亿元）',left:'center',textStyle:{fontSize:16,color:'#333'}},
   tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-  legend:{data:['超大单','大单','中单','小单'],top:30},
-  grid:{left:80,right:60,top:70,bottom:30},
+  grid:{left:80,right:60,top:50,bottom:30},
   xAxis:{type:'value',axisLabel:{formatter:'{value}亿'},splitLine:{lineStyle:{color:'#f0f0f0',type:'dashed'}}},
-  yAxis:{type:'category',data:N,axisLabel:{fontSize:12}},
-  series:[
-    {name:'超大单',type:'bar',stack:'a',data:S,itemStyle:{color:'#c0392b'}},
-    {name:'大单',type:'bar',stack:'a',data:L,itemStyle:{color:'#e74c3c'}},
-    {name:'中单',type:'bar',stack:'a',data:Mi,itemStyle:{color:'#3498db'}},
-    {name:'小单',type:'bar',stack:'a',data:Sm,itemStyle:{color:'#2ecc71'}}
-  ],
+  yAxis:{type:'category',data:barNames,axisLabel:{fontSize:11}},
+  series:[{
+    type:'bar',data:barValues,
+    itemStyle:{color:function(p){return barColors[p.dataIndex];}},
+    barWidth:'55%',
+    label:{show:true,position:'right',formatter:function(p){return (p.value>=0?'+':'')+p.value.toFixed(2)+'亿'},fontSize:10}
+  }],
   animation:true
 });
 
 window.addEventListener('resize',function(){ch1.resize();ch2.resize();});
 
-// 切换视图
-function showMain(){
+function showLine(){
   document.getElementById('ch1').style.display='block';
   document.getElementById('ch2').style.display='none';
   document.getElementById('tb').style.display='none';
-  document.getElementById('st').style.display='grid';
   uB(0);ch1.resize();
 }
-function showDetail(){
+function showBar(){
   document.getElementById('ch1').style.display='none';
   document.getElementById('ch2').style.display='block';
   document.getElementById('tb').style.display='none';
-  document.getElementById('st').style.display='none';
   uB(1);ch2.resize();
 }
 function showTable(){
   document.getElementById('ch1').style.display='none';
   document.getElementById('ch2').style.display='none';
   document.getElementById('tb').style.display='block';
-  document.getElementById('st').style.display='none';
   uB(2);
 }
 function uB(i){
-  document.querySelectorAll('.ct .bn').forEach(function(b,j){
-    b.classList.toggle('a',j===i);
-  });
+  document.querySelectorAll('.ct .bn').forEach(function(b,j){b.classList.toggle('a',j===i);});
 }
-function hl(idx){
-  ch1.dispatchAction({type:'showTip',seriesIndex:0,dataIndex:idx});
+function hl(name){
+  ch1.dispatchAction({type:'legendToggleSelect',name:name});
 }
 
-// 填充表格
 var tbd=document.getElementById('tbd');
-for(var i=0;i<N.length;i++){
-  var mc=M[i]>=0?'u':'d',sc=S[i]>=0?'u':'d',lc=L[i]>=0?'u':'d',mic=Mi[i]>=0?'u':'d',smc=Sm[i]>=0?'u':'d';
-  tbd.innerHTML+='<tr>'+
-    '<td><b>'+N[i]+'</b></td>'+
-    '<td class="'+mc+'">'+(M[i]>=0?'+':'')+M[i].toFixed(2)+'亿</td>'+
-    '<td class="'+sc+'">'+(S[i]>=0?'+':'')+S[i].toFixed(2)+'亿</td>'+
-    '<td class="'+lc+'">'+(L[i]>=0?'+':'')+L[i].toFixed(2)+'亿</td>'+
-    '<td class="'+mic+'">'+(Mi[i]>=0?'+':'')+Mi[i].toFixed(2)+'亿</td>'+
-    '<td class="'+smc+'">'+(Sm[i]>=0?'+':'')+Sm[i].toFixed(2)+'亿</td>'+
-    '<td class="'+mc+'">'+(M[i]>=0?'+':'')+M[i].toFixed(2)+'%</td>'+
-    '</tr>';
-}
+D.forEach(function(s){
+  var v=s.data[s.data.length-1]||0;
+  var c=v>=0?'u':'d',sg=v>=0?'+':'';
+  tbd.innerHTML+='<tr><td><b>'+s.name+'</b></td>'+
+    '<td class="'+c+'">'+sg+v.toFixed(2)+'亿</td>'+
+    '<td>-</td><td>-</td><td>-</td></tr>';
+});
 </script>
 </body>
 </html>
