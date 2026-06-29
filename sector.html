@@ -38,6 +38,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-
 .tbf{max-height:350px;overflow-y:auto;border:1px solid #eee;border-radius:6px;display:none}
 .ft{margin-top:16px;text-align:center;font-size:12px;color:#aaa;padding-top:12px;border-top:1px solid #eee}
 .cd{font-size:12px;color:#999;margin-top:8px;text-align:center}
+/* 手动采集区域 */
+.mc{margin-top:20px;padding:20px;background:linear-gradient(135deg,#f5f7fa 0%,#e4e8ec 100%);border-radius:10px;border:1px dashed #bbb;text-align:center}
+.mct{font-size:15px;font-weight:600;color:#333;margin-bottom:10px}
+.mcd{font-size:12px;color:#666;margin-bottom:14px;line-height:1.6}
+.mcb{display:inline-block;padding:10px 32px;background:#2ea44f;color:#fff;font-size:14px;font-weight:600;border-radius:6px;text-decoration:none;cursor:pointer;transition:all .2s;border:none}
+.mcb:hover{background:#22863a;transform:translateY(-1px);box-shadow:0 4px 12px rgba(46,164,79,0.3)}
+.mcs{margin-top:10px;font-size:11px;color:#888}
 </style>
 </head>
 <body>
@@ -68,6 +75,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-
 <thead><tr><th>板块</th><th>主力净流入</th><th>超大单</th><th>大单</th><th>占比</th></tr></thead>
 <tbody id="tbd"></tbody>
 </table>
+</div>
+
+<!-- 手动采集区域 -->
+<div class="mc">
+<div class="mct">手动采集最新数据</div>
+<div class="mcd">自动采集每30分钟运行一次。<br>如需立即刷新数据，点击下方按钮前往 GitHub Actions 手动触发。</div>
+<a href="https://github.com/NathanLi0829/NathanLi0829.github.io/actions/workflows/update-sectors.yml" target="_blank" class="mcb">
+  <i class="fa-solid fa-rotate"></i> 立即采集
+</a>
+<div class="mcs">点击后在新页面选择 "Run workflow" 即可手动触发数据采集</div>
 </div>
 
 <div class="cd">数据更新时间: 2026-06-29 18:14 | 采样频率: 每30分钟 | 数据来源: 东方财富 | 仅供投资参考</div>
