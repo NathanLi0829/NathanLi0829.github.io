@@ -1,34 +1,38 @@
-name: Update Sector Fund Flow
+name: Automatic Sector Data Pipeline
+
 on:
   schedule:
-    - cron: "*/5 1-3 * * 1-5"
-    - cron: "*/5 5-7 * * 1-5"
-  workflow_dispatch:
+    # 盘中每 10 分钟自动采集一次数据
+    # 北京时间周一至周五：09:30-11:30 对应 UTC 01:30-03:30
+    # 北京时间周一至周五：13:00-15:00 对应 UTC 05:00-07:00
+    - cron: '*/10 1-3 * * 1-5'
+    - cron: '*/10 5-7 * * 1-5'
+  workflow_dispatch: # 支持你在 GitHub 页面上手动点击按钮触发测试
 
 jobs:
-  update:
+  scrape_and_deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+    - name: Setup Python Environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      - name: Configure Git
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+    - name: Install Data Engineering Libraries
+      run: |
+        pip install akshare pandas
 
-      - name: Run collector
-        run: python update_sectors.py --local
+    - name: Execute Data Crawler
+      run: python fetch_data.py
 
-      - name: Commit and push
-        run: |
-          git add fund_data.json sector.html
-          git diff --cached --quiet || (git commit -m "Auto update: $(date '+%Y-%m-%d %H:%M')" && git push)
+    - name: Commit and Push to GitHub Pages
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "GitHub Actions Bot"
+        git add sector_data.json
+        # 如果没有数据变化则不报错退出
+        git commit -m "📊 自动更新实时板块资金流向数据 [skip ci]" || echo "No changes to commit"
+        git push origin main
