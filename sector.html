@@ -80,7 +80,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-
 <div class="mc">
 <div class="mct">数据采集</div>
 <div class="mcd">当前交易进行中，数据截至 13:35。<br>收盘后(15:00)将补全全天50个采样点。</div>
-<a href="https://github.com/NathanLi0829/NathanLi0829.github.io/actions" target="_blank" class="mcb">前往GitHub Actions</a>
+<a href="https://github.com/NathanLi0829/NathanLi0829.github.io/actions" target="_blank" class="mcb">GitHub Actions</a>
 <button class="mcb mcb2" onclick="location.reload()">刷新页面</button>
 </div>
 <div class="cd" id="cd">数据日期: 2026-07-07 | 当前时间: 13:38 | 已采样: 33/50个点 | 交易中 | 来源: 东方财富</div>
@@ -97,10 +97,10 @@ var names=Object.keys(S);
 var series=[];
 var latest={};
 names.forEach(function(n,idx){
-var vals=S[n].map(function(v,i){return (v===null||i>LAST_IDX)?undefined:v;});
-var valid=vals.filter(function(v){return v!==undefined;});
+var vals=S[n].map(function(v,i){return (v===null||i>LAST_IDX)?'-':v;});
+var valid=vals.filter(function(v){return v!=='-';});
 latest[n]=valid[valid.length-1];
-series.push({name:n,type:'line',smooth:0.3,symbol:'none',lineStyle:{width:1.5},data:vals});
+series.push({name:n,type:'line',smooth:0.3,symbol:'none',lineStyle:{width:1.5},connectNulls:false,data:vals});
 });
 
 var sorted=Object.entries(latest).sort(function(a,b){return b[1]-a[1];});
@@ -117,21 +117,21 @@ sorted.forEach(function(x){var n=x[0],v=x[1],c=v>=0?'u':'d',sg=v>=0?'+':'';cards
 document.getElementById('st').innerHTML=cards;
 
 var ch1=echarts.init(document.getElementById('ch1'));
-ch1.setOption({title:{text:'板块主力净流入日内走势（亿元）截至13:35',left:'center',top:5,textStyle:{fontSize:16,color:'#333'}},tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.95)',borderColor:'#ddd',borderWidth:1,textStyle:{color:'#333',fontSize:12},formatter:function(p){var h='<div style="font-weight:700;margin-bottom:6px;">'+T[p[0].dataIndex]+'</div>';p.sort(function(a,b){return b.value-a.value;});p.forEach(function(x){if(x.value==null)return;var c=x.value>=0?'#e74c3c':'#27ae60',s=x.value>=0?'+':'';h+='<div style="display:flex;justify-content:space-between;min-width:180px;padding:2px 0;"><span>'+x.marker+' '+x.seriesName+'</span><span style="color:'+c+';font-weight:600;">'+s+x.value.toFixed(1)+'亿</span></div>';});return h;}},legend:{data:names,top:35,type:'scroll',textStyle:{fontSize:11}},grid:{left:70,right:60,top:90,bottom:50},xAxis:{type:'category',boundaryGap:false,data:T,axisLabel:{fontSize:10,color:'#666',interval:4,rotate:45},axisLine:{lineStyle:{color:'#ddd'}},splitLine:{show:false}},yAxis:{type:'value',name:'亿元',nameTextStyle:{color:'#999',fontSize:11},axisLabel:{fontSize:11,color:'#666',formatter:function(v){return v>=0?'+'+v:v;}},axisLine:{show:false},splitLine:{lineStyle:{color:'#f0f0f0',type:'dashed'}},scale:true},series:series,color:COLS,animation:true,animationDuration:1000});
+ch1.setOption({title:{text:'板块主力净流入日内走势（亿元）截至13:35',left:'center',top:5,textStyle:{fontSize:16,color:'#333'}},tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.95)',borderColor:'#ddd',borderWidth:1,textStyle:{color:'#333',fontSize:12},formatter:function(p){var h='<div style="font-weight:700;margin-bottom:6px;">'+T[p[0].dataIndex]+'</div>';p.sort(function(a,b){return b.value-a.value;});p.forEach(function(x){if(x.value==='-')return;var c=x.value>=0?'#e74c3c':'#27ae60',s=x.value>=0?'+':'';h+='<div style="display:flex;justify-content:space-between;min-width:180px;padding:2px 0;"><span>'+x.marker+' '+x.seriesName+'</span><span style="color:'+c+';font-weight:600;">'+s+x.value.toFixed(1)+'亿</span></div>';});return h;}},legend:{data:names,top:35,type:'scroll',textStyle:{fontSize:11}},grid:{left:70,right:60,top:90,bottom:50},xAxis:{type:'category',boundaryGap:false,data:T,axisLabel:{fontSize:10,color:'#666',interval:4,rotate:45},axisLine:{lineStyle:{color:'#ddd'}},splitLine:{show:false}},yAxis:{type:'value',name:'亿元',nameTextStyle:{color:'#999',fontSize:11},axisLabel:{fontSize:11,color:'#666',formatter:function(v){return v>=0?'+'+v:v;}},axisLine:{show:false},splitLine:{lineStyle:{color:'#f0f0f0',type:'dashed'}},scale:true},series:series,color:COLS,animation:true,animationDuration:1000});
 
 var ch2=echarts.init(document.getElementById('ch2'));
 var bN=sorted.map(function(x){return x[0];}),bV=sorted.map(function(x){return x[1];}),bC=bV.map(function(v){return v>=0?'#e74c3c':'#27ae60';});
 ch2.setOption({title:{text:'当前主力净流入对比（亿元）',left:'center',textStyle:{fontSize:16,color:'#333'}},tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},grid:{left:80,right:60,top:50,bottom:30},xAxis:{type:'value',axisLabel:{formatter:'{value}亿'},splitLine:{lineStyle:{color:'#f0f0f0',type:'dashed'}}},yAxis:{type:'category',data:bN,axisLabel:{fontSize:11}},series:[{type:'bar',data:bV,itemStyle:{color:function(p){return bC[p.dataIndex];}},barWidth:'55%',label:{show:true,position:'right',formatter:function(p){return (p.value>=0?'+':'')+p.value.toFixed(1)+'亿';},fontSize:10}}]});
 
 var ch3=echarts.init(document.getElementById('ch3'));
-var rankData=names.map(function(n){var d=S[n];var valid=d.filter(function(v){return v!==null;});return{name:n,value:valid[valid.length-1]-valid[0]};}).sort(function(a,b){return b.value-a.value;});
+var rankData=names.map(function(n){var d=S[n];var valid=d.filter(function(v){return v!==null&&v!=='-';});return{name:n,value:valid[valid.length-1]-valid[0]};}).sort(function(a,b){return b.value-a.value;});
 ch3.setOption({title:{text:'时段净流入增量（亿元）',left:'center',textStyle:{fontSize:16,color:'#333'}},tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},grid:{left:80,right:60,top:50,bottom:30},xAxis:{type:'value',axisLabel:{formatter:'{value}亿'},splitLine:{lineStyle:{color:'#f0f0f0',type:'dashed'}}},yAxis:{type:'category',data:rankData.map(function(x){return x.name;}),axisLabel:{fontSize:11}},series:[{type:'bar',data:rankData.map(function(x){return x.value;}),itemStyle:{color:function(p){return p.value>=0?'#e74c3c':'#27ae60';}},barWidth:'55%',label:{show:true,position:'right',formatter:function(p){return (p.value>=0?'+':'')+p.value.toFixed(1)+'亿';},fontSize:10}}]});
 
 var tb='';
 T.slice(0,LAST_IDX+1).forEach(function(t,ti){
 sorted.forEach(function(x){
 var v=S[x[0]][ti];
-if(v==null)return;
+if(v===null||v==='-')return;
 var c=v>=0?'u':'d',sg=v>=0?'+':'';
 tb+='<tr><td>'+t+'</td><td><b>'+x[0]+'</b></td><td class="'+c+'">'+sg+v.toFixed(2)+'亿</td></tr>';
 });
